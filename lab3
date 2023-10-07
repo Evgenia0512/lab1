@@ -1,1 +1,27 @@
+while True:
+    text = input("Введіть рядок, який має бути не менше 20 символів: ")
+    if len(text) >= 20:
+        break
+    else:
+        print("Рядок занадто короткий. Спробуйте ще раз.")
+result = text[19:]
 
+print("Результат:", result)
+
+word = input("Введіть слово: ")
+unique_chars = set(word)
+count_unique_chars = len(unique_chars)
+print(f"Кількість різних символів у слові : {count_unique_chars}")
+
+sentence = input("Введіть речення: ")
+words = sentence.split()
+different_words = []
+for word in words:
+    if word != "привіт":
+        different_words.append(word)
+if different_words:
+    print("Слова, відмінні від 'привіт':")
+    for word in different_words:
+        print(word)
+else:
+    print("Усі слова в реченні однакові з 'привіт'.")
