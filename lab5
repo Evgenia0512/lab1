@@ -1,0 +1,28 @@
+N = int(input("Введіть розмір масиву: "))
+mas = []
+for i in range(N):
+    element = int(input(f"Введіть {i+1}-й елемент: "))
+    mas.append(element)
+max_element = max(mas)
+print(f"Максимальний елемент у масиві: {max_element}")
+
+size = 7
+mas = []
+for i in range(size):
+    row = [0] * size
+    mas.append(row)
+
+x = 7
+for i in range(0, 7):
+    for j in range(0, 7):
+        if x - j >= 1:
+            mas[i][j] = x - j
+        else:
+            mas[i][j] = 0
+
+    x = x - 1
+
+for i in range(7):
+    for j in range(7):
+        print(mas[i][j], end=" ")
+    print()
