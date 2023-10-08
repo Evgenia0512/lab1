@@ -1,0 +1,42 @@
+list = []
+
+length = int(input("Введіть кількість чисел: "))
+for i in range(length):
+    element = input(f"Введіть {i+1}-й елемент: ")
+    list.append(element)
+new_element = input("Введіть новий елемент: ")
+target_element = input("Введіть цільовий елемент, перед яким потрібно вставити новий елемент: ")
+if target_element in list:
+    index = list.index(target_element)
+    list.insert(index, new_element)
+else:
+    print(f"Елемент '{target_element}' не знайдено у списку")
+print("Список після вставки:")
+print(list)
+
+
+list = []
+
+length = int(input("Введіть кількість чисел: "))
+for i in range(length):
+    element = input(f"Введіть {i+1}-й елемент: ")
+    list.append(element)
+search_value = input("Введіть значення для пошуку: ")
+found = False
+for i, element in enumerate(list):
+    if element == search_value:
+        print(f"Знайдено на позиції {i + 1}.")
+        found = True
+        break
+
+if not found:
+    print("Елемент не знайдено в списку.")
+
+
+characters_set = set()
+for char in 'abcdefghijklmnopqrstuvwxyz':
+    characters_set.add(char)
+sorted_characters = sorted(characters_set)
+for char in sorted_characters:
+    print(char, end=' ')
+print()
