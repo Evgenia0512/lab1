@@ -1,1 +1,109 @@
+1.	import numpy as np
+import matplotlib.pyplot as plt
+
+# Задаємо область значень x
+x = np.linspace(-5, 5, 1000)
+
+# Визначаємо функцію Y(x)
+y = (1/x) * np.sin(5*x)
+
+# Побудова графіку
+plt.figure(figsize=(8, 6))  # Розміри графіку
+plt.plot(x, y, linestyle='-', color='blue', linewidth=2, label=r'$\frac{1}{x} \cdot \sin(5x)$')
+
+# Додаємо осі
+plt.axhline(0, color='black',linewidth=0.5)
+plt.axvline(0, color='black',linewidth=0.5)
+
+# Позначаємо осі
+plt.xlabel('x')
+plt.ylabel('Y(x)')
+
+# Додаємо заголовок
+plt.title('Графік функції Y(x) = (1/x) * sin(5*x)')
+
+# Додаємо легенду
+plt.legend()
+
+# Виводимо графік
+plt.grid(True)
+plt.show()
+
+2.	import pandas as pd
+import matplotlib.pyplot as plt
+
+# Завантаження даних
+data = pd.read_excel('P_Data_Extract_From_Education_Statistics_-_All_Indicators.xlsx')
+
+# 2.1 Вибірка даних для України та США
+ukraine_data = data[data['Country Name'] == 'Ukraine']
+usa_data = data[data['Country Name'] == 'United States']
+
+# Пропускаємо рядок з описом перед вибором числових значень
+ukraine_values = pd.to_numeric(ukraine_data.iloc[0, 4:], errors='coerce').dropna()
+usa_values = pd.to_numeric(usa_data.iloc[0, 4:], errors='coerce').dropna()
+
+# Відображення графіку
+plt.figure(figsize=(10, 6))
+plt.plot(range(len(ukraine_values)), ukraine_values, label='Україна', marker='o')
+plt.plot(range(len(usa_values)), usa_values, label='США', marker='o')
+
+plt.xlabel('Рік')
+plt.ylabel('Typology of out-of-school children (Primary, Dropped out)')
+plt.title('Динаміка показника за останні роки')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+3.	import matplotlib.pyplot as plt
+
+# а) Створення файлу TF2_1 з різними символьними рядками
+with open("TF2_1.txt", "w") as file1:
+    file1.write("12345 надо щось написати!\n")
+    file1.write("Просто текст без цифр\n")
+    file1.write("42 не більше по довжині ніж 2.\n")
+
+# б) Читання файлу TF2_1, знаходження послідовностей цифр та запис до файлу TF2_2
+with open("TF2_1.txt", "r") as file1, open("TF2_2.txt", "w") as file2:
+    content = file1.read()
+    digit_sequences = []
+    current_sequence = ""
+
+    for char in content:
+        if char.isdigit():
+            current_sequence += char
+        elif current_sequence:
+            if len(current_sequence) > 2:
+                digit_sequences.append(current_sequence)
+            current_sequence = ""
+
+    if len(current_sequence) > 2:
+        digit_sequences.append(current_sequence)
+
+    file2.write(" ".join(digit_sequences))
+
+# в) Читання вмісту файлу TF2_2 і виведення на екран
+with open("TF2_2.txt", "r") as file2:
+    content = file2.read()
+    print("Знайдені послідовності цифр (довжиною більше 2):", content)
+
+# г) Аналіз та обчислення відсотків для кожного показника
+total_length = len(content)
+digit_count = len(content.split())  # кількість знайдених послідовностей цифр
+non_digit_count = total_length - digit_count
+
+percent_digits = (digit_count / total_length) * 100
+percent_non_digits = (non_digit_count / total_length) * 100
+
+# д) Побудова кругової діаграми
+labels = ['Послідовності цифр', 'Інші символи']
+sizes = [percent_digits, percent_non_digits]
+colors = ['lightcoral', 'lightskyblue']
+explode = (0.1, 0)  # виділення "Послідовності цифр"
+
+plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+plt.axis('equal')  # Рівні вісі для коректного відображення кругової діаграми
+
+plt.title('Розподіл послідовностей цифр у файлі')
+plt.show()
 
