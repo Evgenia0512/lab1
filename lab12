@@ -1,0 +1,80 @@
+import json
+employees = [
+    {"Прізвище": "Іванов", "Адреса": "вул. Пушкіна, 5", "Посада": "Менеджер"},
+    {"Прізвище": "Петров", "Адреса": "вул. Гагаріна, 10", "Посада": "Програміст"},
+    {"Прізвище": "Сидоров", "Адреса": "вул. Леніна, 15", "Посада": "Фінансист"},
+    {"Прізвище": "Коваленко", "Адреса": "вул. Шевченка, 20", "Посада": "Маркетолог"},
+    {"Прізвище": "Захарченко", "Адреса": "вул. Героїв України, 12", "Посада": "Аналітик"},
+    {"Прізвище": "Мельник", "Адреса": "вул. Коцюбинського, 8", "Посада": "Дизайнер"},
+    {"Прізвище": "Павленко", "Адреса": "вул. Герцена, 25", "Посада": "Менеджер"},
+    {"Прізвище": "Сергієнко", "Адреса": "вул. Пушкіна, 3", "Посада": "Програміст"},
+    {"Прізвище": "Лисенко", "Адреса": "вул. Гагаріна, 7", "Посада": "Аналітик"},
+    {"Прізвище": "Павлюк", "Адреса": "вул. Шевченка, 18", "Посада": "Менеджер"}
+]
+with open("employees.json", "w") as file:
+    json.dump(employees, file, indent=4)
+def load_data(filename):
+    try:
+        with open(filename, "r") as file:
+            data = json.load(file)
+        return data
+    except FileNotFoundError:
+        return []
+
+def save_data(data, filename):
+    with open(filename, "w") as file:
+        json.dump(data, file, indent=4)
+
+def display_data(data):
+    for record in data:
+        print(record)
+
+def add_record(data, surname, address, position):
+    record = {
+        "Прізвище": surname,
+        "Адреса": address,
+        "Посада": position
+    }
+    data.append(record)
+    return data
+
+def search_by_surname(data, letter):
+    matching_records = [record for record in data if record["Прізвище"].startswith(letter)]
+    return matching_records
+
+def main():
+    data = load_data("employees.json")
+
+    while True:
+        print("\nОберіть опцію:")
+        print("1 - Вивести дані")
+        print("2 - Додати запис")
+        print("3 - Пошук за початковою літерою прізвища")
+        print("4 - Вийти")
+
+        choice = input("Ваш вибір: ")
+
+        if choice == "1":
+            display_data(data)
+        elif choice == "2":
+            surname = input("Прізвище: ")
+            address = input("Адреса: ")
+            position = input("Посада: ")
+            data = add_record(data, surname, address, position)
+            save_data(data, "employees.json")
+        elif choice == "3":
+            letter = input("Введіть початкову літеру прізвища: ")
+            matching_records = search_by_surname(data, letter)
+            if matching_records:
+                print("Знайдені співробітники:")
+                for record in matching_records:
+                    print("Адреса:", record["Адреса"])
+            else:
+                print("Співробітники з такою початковою літерою прізвища не знайдені.")
+        elif choice == "4":
+            break
+        else:
+            print("Невірний вибір. Спробуйте ще раз.")
+
+if __name__ == "__main__":
+    main()
