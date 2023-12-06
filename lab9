@@ -1,0 +1,29 @@
+# а) Створення файлу TF2_1 з різними символьними рядками
+with open("TF2_1.txt", "w") as file1:
+    file1.write("12345 надо щось написати!\n")
+    file1.write("Просто текст без цифр\n")
+    file1.write("42 не більше по довжині ніж 2.\n")
+
+# б) Читання файлу TF2_1, знаходження послідовностей цифр та запис до файлу TF2_2
+with open("TF2_1.txt", "r") as file1, open("TF2_2.txt", "w") as file2:
+    content = file1.read()
+    digit_sequences = []
+    current_sequence = ""
+
+    for char in content:
+        if char.isdigit():
+            current_sequence += char
+        elif current_sequence:
+            if len(current_sequence) > 2:
+                digit_sequences.append(current_sequence)
+            current_sequence = ""
+
+    if len(current_sequence) > 2:
+        digit_sequences.append(current_sequence)
+
+    file2.write(" ".join(digit_sequences))
+
+# в) Читання вмісту файлу TF2_2 і виведення на екран
+with open("TF2_2.txt", "r") as file2:
+    content = file2.read()
+    print("Знайдені послідовності цифр (довжиною більше 2):", content)
