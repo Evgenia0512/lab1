@@ -1,0 +1,75 @@
+3.	import nltk
+
+# Завантаження NLTK-даних
+nltk.download('gutenberg')
+nltk.download('punkt')
+nltk.download('stopwords') 
+
+import matplotlib.pyplot as plt
+from nltk.corpus import gutenberg
+from nltk import FreqDist
+from nltk.corpus import stopwords
+from string import punctuation
+
+# Завантаження тексту
+file_id = 'austen-persuasion.txt'
+text = nltk.corpus.gutenberg.raw(file_id)
+
+# Визначення кількості слів у тексті
+words = nltk.word_tokenize(text)
+num_words = len(words)
+print(f"Кількість слів у тексті: {num_words}")
+
+# Визначення 10 найбільш вживаних слів та побудова діаграми
+fdist = FreqDist(words)
+top_words = fdist.most_common(10)
+print(f"10 найбільш вживаних слів: {top_words}")
+fdist.plot(10, cumulative=False)
+plt.show()
+
+# Видалення стоп-слів та пунктуації
+stop_words = set(stopwords.words('english'))
+filtered_words = [word.lower() for word in words if word.isalpha() and word.lower() not in stop_words]
+
+# Визначення 10 найбільш вживаних слів після видалення стоп-слів та пунктуації
+filtered_fdist = FreqDist(filtered_words)
+filtered_top_words = filtered_fdist.most_common(10)
+print(f"10 найбільш вживаних слів після видалення стоп-слів та пунктуації: {filtered_top_words}")
+filtered_fdist.plot(10, cumulative=False)
+plt.show()
+5.	# -*- coding: utf-8 -*-
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer, PorterStemmer
+import string
+from stop_words import get_stop_words
+
+# Завантаження NLTK-даних
+nltk.download('punkt')
+nltk.download('wordnet')
+
+# Текст для обробки
+original_text = "Найбільша цінність людини - її душа. Вона є у кожного але не всі правильно це розуміють. Людина - жива істота, яка має почуття, за допомогою яких вона виражає себе та показує свою душу. Важливо залишатися доброю, щирою, відкритою, життєрадісною людиною, бо лише тоді наша душа буде чистою. Треба пам’ятати про це, та робити все, задля досягнення цієї мети."
+
+# Токенізація по словам
+words = word_tokenize(original_text)
+
+# Лемматизація
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(word) for word in words]
+
+# Стеммінг
+stemmer = PorterStemmer()
+stemmed_words = [stemmer.stem(word) for word in words]
+
+# Видалення стоп-слів для української мови
+stop_words = get_stop_words('ukrainian')
+filtered_words = [word for word in lemmatized_words if word.lower() not in stop_words]
+
+# Видалення пунктуації
+filtered_words = [word for word in filtered_words if word not in string.punctuation]
+
+# Запис обробленого тексту у файл
+processed_text = ' '.join(filtered_words)
+with open('processed_text.txt', 'w', encoding='utf-8') as file:
+    file.write(processed_text)
