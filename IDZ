@@ -1,0 +1,107 @@
+1. from PIL import Image
+
+# Відкриття зображення
+img = Image.open('Снимок экрана 2023-03-05 130756.png')
+
+# Перетворення режиму кольору на RGB
+img = img.convert('RGB')
+
+# Отримання даних про пікселі
+pixels = img.load()
+
+# Інвертування кольорів
+for i in range(img.width):
+    for j in range(img.height):
+        # Отримати RGB значення в одному кортежі
+        rgb = pixels[i, j]
+        # Інвертувати кожен компонент RGB
+        inverted_rgb = tuple(255 - x for x in rgb)
+        # Призначити інвертований кортеж пікселю
+        pixels[i, j] = inverted_rgb
+
+# Збереження інвертованого зображення
+img.save('inverted_image.jpg')
+2. from PIL import Image, ImageDraw, ImageFont
+
+class GreetingCardGenerator:
+    def __init__(self):
+        self.image = None
+        self.font = None
+
+    def load_image(self, image_path):
+        # Етап 1: Завантаження зображення з файлу
+        self.image = Image.open(image_path)
+
+    def edit_image(self, target_size=800):
+        # Етап 2: Ресайз та обрізка зображення, щоб отримати квадрат
+        width, height = self.image.size
+        min_dimension = min(width, height)
+        left = (width - min_dimension) // 2
+        top = (height - min_dimension) // 2
+        right = (width + min_dimension) // 2
+        bottom = (height + min_dimension) // 2
+
+        self.image = self.image.crop((left, top, right, bottom))
+        self.image = self.image.resize((target_size, target_size))
+
+    def create_layout(self):
+        # Етап 3: Створення нового білого фонового зображення для листівки
+        card_width, card_height = self.image.size
+        card = Image.new("RGB", (card_width, card_height), "white")
+
+        # Розміщення редагованого зображення у центрі білого фону
+        left_offset = (card_width - self.image.width) // 2
+        top_offset = (card_height - self.image.height) // 2
+        card.paste(self.image, (left_offset, top_offset))
+
+        # Оновлення основного зображення листівки
+        self.image = card
+
+    def add_text(self, text, font_size, text_color, outline_color, outline_width):
+        # Етап 4: Визначення шляху до шрифту
+        font_path = "shrift.ttf"
+
+        # Завантаження шрифту та визначення об'єкту для його використання
+        self.font = ImageFont.truetype(font_path, font_size)
+
+        # Створення об'єкту для редагування тексту
+        draw = ImageDraw.Draw(self.image)
+
+        # Визначення позиції для центру тексту
+        bbox = draw.textbbox((0, 0), text, font=self.font)
+        position = ((self.image.width - (bbox[2] - bbox[0])) // 2, (self.image.height - (bbox[3] - bbox[1])) // 2)
+
+        # Додавання тексту на листівку з білим обрамленням
+        draw.text(position, text, font=self.font, fill=text_color, outline=outline_color, width=outline_width)
+
+    def save_card(self, save_name="greeting_card.jpg"):
+        # Етап 5: Збереження листівки у поточному каталозі
+        self.image.save(save_name)
+
+    def show_card(self):
+        # Етап 6: Виведення листівки на екран
+        self.image.show()
+
+# Приклад використання
+if __name__ == "__main__":
+    generator = GreetingCardGenerator()
+
+    # 1. Завантаження зображення
+    image_path = "vozdushnie-shariki.jpg"
+    generator.load_image(image_path)
+
+    # 2. Редагування зображення
+    generator.edit_image()
+
+    # 3. Створення макету листівки
+    generator.create_layout()
+
+    # 4. Додавання тексту
+    greeting_text = "Happy Holidays!"
+    generator.add_text(greeting_text, font_size=80, text_color="black", outline_color="white", outline_width=5)
+
+    # 5. Збереження листівки
+    generator.save_card()
+
+    # 6. Виведення листівки на екран
+    generator.show_card()
